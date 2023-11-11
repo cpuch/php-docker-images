@@ -1,0 +1,74 @@
+# Base image
+FROM debian:bookworm-slim
+
+# Build arguments.
+ARG PHP_VERSION
+
+# Environment variables.
+ENV DEBIAN_FRONTEND="noninteractive"
+ENV PHP_VERSION=${PHP_VERSION}
+
+# Update base image.
+RUN apt-get update && \
+    apt-get upgrade -y
+
+# Install base packages.
+RUN apt-get install -y lsb-release ca-certificates curl gnupg nano
+
+# Install packages.sur.org signing key.
+RUN curl -fsSL https://packages.sury.org/php/apt.gpg | gpg --dearmor -o /usr/share/keyrings/sury.gpg
+
+# Add packages.sury.org to apt sources.
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/sury.gpg] https://packages.sury.org/php/ bookworm main" | tee /etc/apt/sources.list.d/php.list
+
+# Install php and extenions.
+RUN apt-get update && \
+    apt-get install -y \
+        libfcgi0ldbl \
+        php${PHP_VERSION}-amqp \
+        php${PHP_VERSION}-apcu \
+        php${PHP_VERSION}-bcmath \
+        php${PHP_VERSION}-bz2 \
+        php${PHP_VERSION}-cli \
+        php${PHP_VERSION}-common \
+        php${PHP_VERSION}-curl \
+        php${PHP_VERSION}-fpm \
+        php${PHP_VERSION}-gd \
+        php${PHP_VERSION}-imagick \
+        php${PHP_VERSION}-intl \
+        php${PHP_VERSION}-ldap \
+        php${PHP_VERSION}-mbstring \
+        php${PHP_VERSION}-mcrypt \
+        php${PHP_VERSION}-memcache \
+        php${PHP_VERSION}-mysql \
+        php${PHP_VERSION}-opcache \
+        php${PHP_VERSION}-pgsql \
+        php${PHP_VERSION}-readline \
+        php${PHP_VERSION}-redis \
+        php${PHP_VERSION}-soap \
+        php${PHP_VERSION}-sqlite3 \
+        php${PHP_VERSION}-xdebug \
+        php${PHP_VERSION}-xml \
+        php${PHP_VERSION}-xsl \
+        php${PHP_VERSION}-zip
+
+# Clear apt cache.
+RUN rm -rf /var/lib/apt/lists/*
+
+# Copy php-fpm config files.
+COPY src/php/fpm/conf/zzz-docker.conf /etc/php/${PHP_VERSION}/fpm/pool.d/zzz-docker.conf
+
+# Define healthcheck script.
+COPY --chmod=755 src/php/php-fpm-healthcheck /usr/local/bin/php-fpm-healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "php-fpm-healthcheck" ]
+
+# Listen on TCP 9000.
+EXPOSE 9000/tcp
+
+# Set entrypoint.
+COPY --chmod=755 src/php/fpm/entrypoint-fpm.sh /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+# Runtime command.
+# https://github.com/moby/moby/issues/5509#issuecomment-42173047
+CMD ["sh", "-c", "php-fpm${PHP_VERSION} -F"]
