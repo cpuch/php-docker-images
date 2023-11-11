@@ -1,4 +1,5 @@
-![workflow](https://github.com/cpuch/docker-images/actions/workflows/ci.yml/badge.svg)
+![build](https://img.shields.io/github/actions/workflow/status/cpuch/php-docker-images/ci.yml) ![docker-pull](https://img.shields.io/docker/pulls/cpuchalver/php)
+
 
 # php-docker-images
 Docker images for PHP applications, CLI and FPM. 
