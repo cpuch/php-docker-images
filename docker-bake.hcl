@@ -1,4 +1,7 @@
 # docker-bake.hcl
+group "default" {
+	targets = ["php"]
+}
 
 target "php" {
 	/**
