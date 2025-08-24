@@ -1,12 +1,12 @@
 name: Continuous Integration
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'main'
-  pull_request:
-  schedule:
-    - cron: '0 0 * * 1'
+  # push:
+  #   branches:
+  #     - 'main'
+  # pull_request:
+  # schedule:
+  #   - cron: '0 0 * * 1'
 
 jobs:
   build-push:
