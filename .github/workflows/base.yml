@@ -1,4 +1,4 @@
-name: Build base images
+name: base
 on:
   workflow_dispatch:
   # push:
