@@ -31,5 +31,5 @@ jobs:
           targets: base
           push: true
           set: |
-            *.cache-from=type=gha
-            *.cache-to=type=gha
+            base.cache-from=type=gha,scope=build-base
+            base.cache-to=type=gha,scope=build-base,mode=max
