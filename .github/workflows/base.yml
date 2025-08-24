@@ -29,8 +29,4 @@ jobs:
         with:
           files: docker-bake.hcl
           targets: base
-          load: true
           push: true
-          set: |
-            *.cache-from=type=gha
-            *.cache-to=type=gha
