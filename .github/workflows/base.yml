@@ -24,9 +24,12 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and push images
+      - name: Build and push base images
         uses: docker/bake-action@v5
         with:
           files: docker-bake.hcl
           targets: base
           push: true
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha
