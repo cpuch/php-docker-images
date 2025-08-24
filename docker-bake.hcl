@@ -57,7 +57,8 @@ target "target-base" {
 	]
 	cache-from = [
 		{
-			type = "gha"
+			type = "gha",
+			scope = "scope-base-${version}"
 		}
 	]
 }
@@ -84,7 +85,8 @@ target "target-php" {
 	]
 	cache-from = [
 		{
-			type = "gha"
+			type = "gha",
+			scope = "scope-${type}-${version}"
 		}
 	]
 }
@@ -111,7 +113,8 @@ target "target-latest" {
 	]
 	cache-from = [
 		{
-			type = "gha"
+			type = "gha",
+			scope = "scope-${type}-${version}"
 		}
 	]
 
