@@ -24,7 +24,7 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and push base images
+      - name: Build and push images
         uses: docker/bake-action@v5
         with:
           files: docker-bake.hcl
