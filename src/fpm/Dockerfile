@@ -1,5 +1,6 @@
 # Declare the PHP version to use (passed as build argument)
 ARG PHP_VERSION=8.4
+
 # Use the custom PHP base image with extensions
 FROM cpuchalver/php-base:${PHP_VERSION}
 
